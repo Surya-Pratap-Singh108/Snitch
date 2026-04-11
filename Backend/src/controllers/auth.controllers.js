@@ -51,6 +51,7 @@ export const register = async (req, res) => {
         res.status(500).json({ message: "Server Error!" });
     }
 };
+
 export const login = async (req, res) => {
     const { email, password } = req.body;
    try{
@@ -73,4 +74,12 @@ export const login = async (req, res) => {
         console.log(error);
         res.status(500).json({ message: "Server Error!" });
     }
+};
+
+export const googleCallback = async (req, res) =>{
+    console.log(req.user);
+    sendTokenResponse(user, res,"User Registered successfully!");
+
+    res.redirect('http://localhost:5173/');
 }
+

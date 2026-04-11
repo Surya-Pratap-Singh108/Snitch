@@ -164,7 +164,13 @@ const Register = () => {
                         </button>
 
                     </form>
-
+                    
+                    <a
+                        href="/api/auth/google"
+                        className="mt-5 flex items-center justify-center font-bold rounded-md bg-[#3B82F6] hover:bg-[#2563EB] px-4 py-2 text-white transition"
+                        >
+                        Continue with Google
+                        </a>
                     <p className="text-center text-sm text-gray-500 mt-8 tracking-wide">
                         Already have an account? <a href="/login" className="text-[#3B82F6] hover:text-[#60A5FA] underline decoration-[#3B82F6]/30 underline-offset-2 transition-colors">Sign in</a>
                     </p>    
