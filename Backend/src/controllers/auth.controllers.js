@@ -77,9 +77,32 @@ export const login = async (req, res) => {
 };
 
 export const googleCallback = async (req, res) =>{
-    console.log(req.user);
-    sendTokenResponse(user, res,"User Registered successfully!");
-
+    const { id,displayName,emails,photos } = req.user;
+    try{const email = emails[0].value;
+    const profileImage = photos[0].value;
+    // sendTokenResponse(user, res,"User Registered successfully!");
+    let user=await userModel.findOne({email});
+        if(!user){
+            user=await userModel.create({
+                email,
+                fullname:displayName,
+                googleId:id,
+            });
+        }
+    const token = jwt.sign(
+        {
+            id: user._id,
+        },
+        config.JWT_SECRET,
+        { expiresIn: "7d" },
+    );
+    res.cookie('token',token);
+    
     res.redirect('http://localhost:5173/');
+    }
+   catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Server Error!" });
+    }
 }
 
