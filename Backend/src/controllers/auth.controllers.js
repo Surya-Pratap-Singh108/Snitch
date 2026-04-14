@@ -80,7 +80,6 @@ export const googleCallback = async (req, res) =>{
     const { id,displayName,emails,photos } = req.user;
     try{const email = emails[0].value;
     const profileImage = photos[0].value;
-    // sendTokenResponse(user, res,"User Registered successfully!");
     let user=await userModel.findOne({email});
         if(!user){
             user=await userModel.create({
