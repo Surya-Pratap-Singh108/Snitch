@@ -5,7 +5,7 @@ const api = axios.create({
   withCredentials: true,
 });
 
- //http://localhost:5173/api/auth/register  by default it uses same base host that is open
+ //http://localhost:5173/api/auth/register  by default it uses same base host that is open then link to proxy that we reated in vite.config.js file
 
 export const register = async ({ email, contact, password,fullname,isSeller }) => {
   const response = await api.post("/register", { email, contact, password,fullname,isSeller });

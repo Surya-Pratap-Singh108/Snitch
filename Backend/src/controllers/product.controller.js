@@ -2,9 +2,9 @@ import productModel from "../models/product.model.js";
 import { uploadFile } from "../services/storage.service.js";
 
 export async function createProduct(req,res) {
+    
     const {title,description,priceAmount,priceCurrenncy}=req.body;
     const seller=req.user;
-    console.log(req.files);
     const images=await Promise.all(req.files.map(async(file)=>{
         return await uploadFile({
             buffer:file.buffer,
@@ -28,4 +28,17 @@ export async function createProduct(req,res) {
             product,
         });
     
+}
+
+export async function getSellerProducts(req,res) {
+    const seller=req.user;
+    const products=await productModel.find({
+        seller:seller._id,
+    })
+    res.status(200).json({
+            message:'Fetch all Products of this seller Successfully!',
+            success:true,
+            products,
+        });
+
 }
