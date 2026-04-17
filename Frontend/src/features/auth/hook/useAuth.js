@@ -1,6 +1,7 @@
 import { useDispatch } from "react-redux";
-import { login, register } from "../service/auth.api.js";
+import { getMe, login, register } from "../service/auth.api.js";
 import { setUser,setLoading,setError } from "../state/auth.slice.js";
+import { data } from "react-router";
 
 
 export const useAuth = () => {
@@ -11,6 +12,7 @@ export const useAuth = () => {
             dispatch(setLoading(true));
             const response = await register({email,contact,password,fullname,isSeller});
             dispatch(setUser(response.user));
+            return response.user;
         } catch (error) {
             dispatch(setError(error.response?.data?.message || "Registration failed"));
         } finally {
@@ -22,11 +24,23 @@ export const useAuth = () => {
             dispatch(setLoading(true));
             const response = await login({email,password});
             dispatch(setUser(response.user));
+            return response.user;
         } catch (error) {
             dispatch(setError(error.response?.data?.message || "Login failed"));
         } finally {
             dispatch(setLoading(false));
         }
     }
-    return {handleRegister,handleLogin};
+    async function handleGetMe() {
+        try {
+            dispatch(setLoading(true));
+            const response = await getMe();
+            dispatch(setUser(response.user));
+        } catch (error) {
+            dispatch(setError(error.response?.data?.message || "Login failed"));
+        } finally {
+            dispatch(setLoading(false));
+        }
+    }
+    return {handleRegister,handleLogin,handleGetMe};
 }

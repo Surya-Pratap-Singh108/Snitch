@@ -42,3 +42,12 @@ export async function getSellerProducts(req,res) {
         });
 
 }
+
+export async function getAllProducts(req,res){
+    const products=await productModel.find();
+    res.status(200).json({
+            message:'Products fetch Successfully!',
+            success:true,
+            products,
+        });
+}

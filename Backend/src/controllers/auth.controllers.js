@@ -67,7 +67,7 @@ export const login = async (req, res) => {
                 message: "Incorrect Password!",
             });
        }
-        sendTokenResponse(user, res,"User Registered successfully!");
+        sendTokenResponse(user, res,"User Login successfully!");
 
    }
    catch (error) {
@@ -103,5 +103,22 @@ export const googleCallback = async (req, res) =>{
         console.log(error);
         res.status(500).json({ message: "Server Error!" });
     }
+}
+
+export const getMe=async (req,res)=>{
+    const user=req.user;
+
+    res.status(200).json({
+        message:"User fetch successfully",
+        success:true,
+        user:{
+            id:user._id,
+            email:user.email,
+            fullname:user.fullname,
+            contact:user.contact,
+            role:user.role,
+        }
+    })
+
 }
 
