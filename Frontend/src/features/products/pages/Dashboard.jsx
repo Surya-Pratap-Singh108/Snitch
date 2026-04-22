@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router';
 
 const ProductCard = ({ product }) => {
     const [imageIndex, setImageIndex] = useState(0);
-
+    const navigate = useNavigate();
     const nextImage = (e) => {
         e.preventDefault();
         e.stopPropagation();
@@ -25,7 +25,9 @@ const ProductCard = ({ product }) => {
     const hasMultipleImages = product.images && product.images.length > 1;
 
     return (
-        <div className="group flex flex-col bg-zinc-900/30 border border-zinc-800/50 rounded-2xl overflow-hidden hover:border-amber-500/30 transition-all duration-300 relative">
+        <div 
+        onClick={() => navigate(`/seller/product/${product._id}`)}
+        className="group flex flex-col bg-zinc-900/30 border border-zinc-800/50 rounded-2xl overflow-hidden hover:border-amber-500/30 transition-all duration-300 relative">
             {/* Image Section */}
             <div className="relative aspect-[4/5] bg-zinc-900 overflow-hidden">
                 {product.images && product.images.length > 0 ? (
@@ -105,24 +107,6 @@ const Dashboard = () => {
 
     return (
         <div className="min-h-[100dvh] bg-zinc-950 text-zinc-50 font-sans selection:bg-amber-500/30 selection:text-amber-200 pb-10">
-            {/* Top bar */}
-            <header className="sticky top-0 z-50 bg-zinc-950/90 backdrop-blur-xl border-b border-zinc-800/50 px-6 lg:px-12 py-4 flex items-center justify-between">
-                <div className="flex items-center gap-4">
-                    <button
-                        type="button"
-                        onClick={() => navigate('/')}
-                        className="w-9 h-9 flex items-center justify-center rounded-full text-zinc-500 hover:text-amber-500 hover:bg-zinc-900 transition-all shrink-0"
-                    >
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-                            <path d="M19 12H5M12 19l-7-7 7-7" />
-                        </svg>
-                    </button>
-                    <span className="text-xl tracking-[0.3em] text-amber-500 font-semibold uppercase">
-                        Snitch
-                    </span>
-                </div>
-            </header>
-
             {/* Page body */}
             <div className="max-w-7xl mx-auto px-6 lg:px-12 py-10 lg:py-14">
                 {/* Header Section */}

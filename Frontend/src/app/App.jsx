@@ -10,8 +10,6 @@ function App() {
   useEffect(() => {
     handleGetMe();
   }, []);
-  const user=useSelector((state)=>state.auth.user);
-  console.log(user);
   return (
     <>
       <RouterProvider router={routes} />

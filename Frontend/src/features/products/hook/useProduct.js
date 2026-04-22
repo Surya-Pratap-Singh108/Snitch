@@ -1,6 +1,6 @@
 import { useDispatch } from "react-redux"
 import { setAllProducts, setError, setLoading, setSellerProducts } from "../state/product.slice";
-import { createProduct, getAllProducts, getSellerProducts } from "../services/product.api";
+import { addProductVariant, createProduct, getAllProducts, getProductById, getSellerProducts } from "../services/product.api";
 
 
 export const useProduct = () => {
@@ -48,6 +48,33 @@ export const useProduct = () => {
             dispatch(setLoading(false));
         }
     }
+    async  function handleGetProductById(productId) {
 
-    return { handlecreateProduct,handlegetSellerProducts,handleGetAllProducts };
+        try {
+            setLoading(true);
+            const response = await getProductById(productId);
+            return response.product;
+
+        } catch (error) {
+            dispatch(setError(error.response?.data?.message || "Getting all Products failed"));
+        } finally {
+            dispatch(setLoading(false));
+        }
+    }
+    async function handleAddProductVariant(productId, newProductVariant) {
+
+        try {
+            setLoading(true);
+            const response = await addProductVariant(productId, newProductVariant);
+            return response;
+
+        } catch (error) {
+            dispatch(setError(error.response?.data?.message || "Adding Product Variant failed"));
+        } finally {
+            dispatch(setLoading(false));
+        }
+    }
+    
+
+    return { handlecreateProduct,handlegetSellerProducts,handleGetAllProducts,handleGetProductById,handleAddProductVariant };
 }

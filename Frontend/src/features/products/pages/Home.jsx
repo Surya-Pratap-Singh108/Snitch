@@ -5,7 +5,7 @@ import { useNavigate } from "react-router";
 
 const ProductCard = ({ product }) => {
     const [imageIndex, setImageIndex] = useState(0);
-
+    const navigate = useNavigate();
     const nextImage = (e) => {
         e.preventDefault();
         e.stopPropagation();
@@ -25,7 +25,9 @@ const ProductCard = ({ product }) => {
     const hasMultipleImages = product.images && product.images.length > 1;
 
     return (
-        <div className="group flex flex-col bg-[#131313] rounded-2xl overflow-hidden hover:bg-[#1a1a1a] transition-all duration-300 relative cursor-pointer">
+        <div 
+        onClick={() => navigate(`/product/${product._id}`)}
+        className="group flex flex-col bg-[#131313] rounded-2xl overflow-hidden hover:bg-[#1a1a1a] transition-all duration-300 relative cursor-pointer">
             {/* Image Section */}
             <div className="relative aspect-[4/5] bg-zinc-900 overflow-hidden">
                 {product.images && product.images.length > 0 ? (
@@ -101,39 +103,7 @@ const Home = () => {
     return (
         <div className="min-h-[100dvh] bg-[#0e0e0e] text-[#e7e5e5] font-sans selection:bg-amber-500/30 selection:text-amber-200 pb-12">
             {/* Navbar */}
-            <header className="sticky top-0 z-50 bg-[#0e0e0e]/80 backdrop-blur-xl px-6 lg:px-12 py-4 flex items-center justify-between">
-                <div className="flex items-center gap-4">
-                    <span className="text-xl tracking-[0.3em] text-amber-500 font-bold uppercase cursor-pointer" onClick={() => navigate('/')}>
-                        Snitch
-                    </span>
-                </div>
-                <div className="flex items-center gap-6">
-                    {user ? (
-                        <>
-                            {user.role === 'seller' && (
-                                <button
-                                    onClick={() => navigate('/seller/dashboard')}
-                                    className="text-xs font-semibold uppercase tracking-widest text-zinc-400 hover:text-amber-500 transition-colors hidden sm:block"
-                                >
-                                    Dashboard
-                                </button>
-                            )}
-                            <div className="flex items-center justify-center text-sm font-medium tracking-wide text-[#e7e5e5]">
-                                {user.fullname}
-                            </div>
-                        </>
-                    ) : (
-                        <div className="flex items-center gap-4">
-                            <button onClick={() => navigate('/login')} className="text-xs font-semibold uppercase tracking-widest text-zinc-400 hover:text-zinc-100 transition-colors">
-                                Sign In
-                            </button>
-                            <button onClick={() => navigate('/register')} className="text-xs font-bold uppercase tracking-widest bg-amber-500 text-zinc-950 px-4 py-2 rounded-lg hover:bg-amber-400 transition-colors">
-                                Sign Up
-                            </button>
-                        </div>
-                    )}
-                </div>
-            </header>
+            
 
             {/* Hero Section */}
             <div className="relative bg-[#131313] overflow-hidden">
