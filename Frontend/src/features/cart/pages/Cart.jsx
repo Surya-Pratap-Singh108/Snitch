@@ -100,8 +100,9 @@ function CartItemCard({ item, index, onUpdateQuantity, onRemove }) {
     const img = getItemImage(item);
     const label = getVariantLabel(item);
     const price = item.price || item.product?.price;
-    const {handleIncrementCartItemQuantity}=useCart();
-
+    const {handleIncrementCartItemQuantity,handleDecrementCartItemQuantity,handleRemoveFromCart}=useCart();
+    const updatedVariantPrice=item.product.variants.find(v=>v._id===item.variant).price;
+    console.log(item);
     return (
 
         <div
@@ -143,10 +144,21 @@ function CartItemCard({ item, index, onUpdateQuantity, onRemove }) {
                         <div className="mt-4 inline-flex items-center text-[#4caf50] text-[10px] font-bold uppercase tracking-widest bg-[#4caf50]/10 px-2.5 py-1.5 rounded">
                             In Stock
                         </div>
+                        {
+                            price.amount!==updatedVariantPrice.amount&&(
+                                
+                                    price.amount>updatedVariantPrice.amount?(
+                                        <p className="text-sm text-green-500 tracking-wide mt-1.5">You Saved {price.amount-updatedVariantPrice.amount}, you will get this at {fmtPrice({amount:updatedVariantPrice.amount,currency:updatedVariantPrice.currency})}</p>
+                                    ):(
+                                        <p className="text-sm text-red-600 tracking-wide mt-1.5">You Pay Extra {updatedVariantPrice.amount-price.amount}, you will get this at {fmtPrice({amount:updatedVariantPrice.amount,currency:updatedVariantPrice.currency})}</p>
+                                    )
+                                
+                            )
+                        }
                     </div>
                     
                     <button
-                        onClick={() => onRemove && onRemove(item)}
+                        onClick={() => handleRemoveFromCart({productId: item.product._id, variantId: item.variant})}
                         className="text-[#8a8a8a] hover:text-red-400 p-2 -mr-2 -mt-2 transition-colors duration-200"
                         title="Remove Item"
                     >
@@ -163,7 +175,7 @@ function CartItemCard({ item, index, onUpdateQuantity, onRemove }) {
                         <span className="text-[11px] text-[#8a8a8a] font-bold uppercase tracking-[0.15em]">Qty</span>
                         <div className="flex items-center bg-[#111] rounded-lg border border-white/[0.08] overflow-hidden h-10">
                             <button 
-                                onClick={() => onUpdateQuantity && onUpdateQuantity(item, -1)}
+                                onClick={() => handleDecrementCartItemQuantity({productId: item.product._id, variantId: item.variant})}
                                 className="w-10 h-full flex items-center justify-center text-[#8a8a8a] hover:text-white hover:bg-white/[0.05] transition-colors"
                             >
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
