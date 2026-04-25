@@ -1,13 +1,12 @@
 import { useDispatch, useSelector } from "react-redux"
-import { addItemToCart, decrementCartItemQuantity, getCart, incrementCartItemQuantity, removeItemFromCart } from "../service/cart.api";
-import { addItem, decrementCartItem, incrementCartItem, removeItem, setItems } from "../state/cart.slice";
+import { addItemToCart, createCartOrder, decrementCartItemQuantity, getCart, incrementCartItemQuantity, removeItemFromCart, verifyCartOrder } from "../service/cart.api";
+import {  decrementCartItem, incrementCartItem, removeItem, setCart } from "../state/cart.slice";
 export const useCart = () => {
 
     const dispatch = useDispatch();
     const handleAddToCart = async ({ productId, variantId }) => {
         try {
             const response = await addItemToCart({ productId, variantId });
-            // dispatch(addItem(response.item));
             return response;
         } catch (error) {
             console.error(error);
@@ -25,7 +24,7 @@ export const useCart = () => {
     const handleGetCart = async () => {
         try {
             const response = await getCart();
-            dispatch(setItems(response.cart.items));
+            dispatch(setCart(response.cart));
             return response;
         } catch (error) {
             console.error(error);
@@ -51,7 +50,23 @@ export const useCart = () => {
             console.error(error);
         }
     }
+    const handleCreateCartOrder = async () => {
+        try {
+            const response = await createCartOrder();
+            return response;
+        } catch (error) {
+            console.error(error);
+        }
+    }
+    const handleVerifyCartOrder = async ({razorpayPaymentId, razorpayOrderId, razorpaySignature}) => {
+        try {
+            const response = await verifyCartOrder({razorpayPaymentId, razorpayOrderId, razorpaySignature});
+            return response?.success;
+        } catch (error) {
+            console.error(error);
+        }
+    }
 
 
-    return { handleAddToCart,handleRemoveFromCart, handleGetCart,handleIncrementCartItemQuantity,handleDecrementCartItemQuantity };
+    return { handleAddToCart,handleRemoveFromCart, handleGetCart,handleIncrementCartItemQuantity,handleDecrementCartItemQuantity,handleCreateCartOrder,handleVerifyCartOrder };
 }

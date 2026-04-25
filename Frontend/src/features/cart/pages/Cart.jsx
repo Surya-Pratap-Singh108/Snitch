@@ -2,21 +2,26 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { useCart } from '../hook/useCart';
+import { useRazorpay } from "react-razorpay";
 
 /* ─── Helpers ─────────────────────────────────────────────────────────── */
 
 function getItemImage(item) {
-    const matched = item.product?.variants?.find(v => v._id === item.variant);
-    if (matched?.images?.[0]?.url) return matched.images[0].url;
+    const variant = item.product?.variants;
+    if (variant && variant._id === item.variant && variant.images?.[0]?.url) {
+        return variant.images[0].url;
+    }
     return item.product?.images?.[0]?.url || null;
 }
 
 function getVariantLabel(item) {
-    const matched = item.product?.variants?.find(v => v._id === item.variant);
-    if (!matched?.attributes) return null;
-    return Object.entries(matched.attributes)
-        .map(([k, v]) => `${k.charAt(0).toUpperCase() + k.slice(1)}: ${v}`)
-        .join(' · ');
+    const variant = item.product?.variants;
+    if (variant && variant._id === item.variant && variant.attributes) {
+        return Object.entries(variant.attributes)
+            .map(([k, v]) => `${k.charAt(0).toUpperCase() + k.slice(1)}: ${v}`)
+            .join(' · ');
+    }
+    return null;
 }
 
 function fmtPrice({ amount = 0, currency = 'INR' } = {}) {
@@ -96,13 +101,15 @@ function EmptyCart({ onShopNow }) {
 
 /* ─── Cart Item Card ──────────────────────────────────────────────────── */
 
-function CartItemCard({ item, index, onUpdateQuantity, onRemove }) {
+function CartItemCard({ item, index}) {
     const img = getItemImage(item);
     const label = getVariantLabel(item);
     const price = item.price || item.product?.price;
     const {handleIncrementCartItemQuantity,handleDecrementCartItemQuantity,handleRemoveFromCart}=useCart();
-    const updatedVariantPrice=item.product.variants.find(v=>v._id===item.variant).price;
-    console.log(item);
+ 
+    const variant = item.product?.variants;
+    const updatedVariantPrice = variant?._id === item.variant ? variant.price : null;
+  
     return (
 
         <div
@@ -145,14 +152,12 @@ function CartItemCard({ item, index, onUpdateQuantity, onRemove }) {
                             In Stock
                         </div>
                         {
-                            price.amount!==updatedVariantPrice.amount&&(
-                                
-                                    price.amount>updatedVariantPrice.amount?(
-                                        <p className="text-sm text-green-500 tracking-wide mt-1.5">You Saved {price.amount-updatedVariantPrice.amount}, you will get this at {fmtPrice({amount:updatedVariantPrice.amount,currency:updatedVariantPrice.currency})}</p>
-                                    ):(
-                                        <p className="text-sm text-red-600 tracking-wide mt-1.5">You Pay Extra {updatedVariantPrice.amount-price.amount}, you will get this at {fmtPrice({amount:updatedVariantPrice.amount,currency:updatedVariantPrice.currency})}</p>
-                                    )
-                                
+                            updatedVariantPrice && price?.amount !== updatedVariantPrice.amount && (
+                                price.amount > updatedVariantPrice.amount ? (
+                                    <p className="text-sm text-green-500 tracking-wide mt-1.5">You Saved {price.amount - updatedVariantPrice.amount}, you will get this at {fmtPrice({amount: updatedVariantPrice.amount, currency: updatedVariantPrice.currency})}</p>
+                                ) : (
+                                    <p className="text-sm text-red-600 tracking-wide mt-1.5">You Pay Extra {updatedVariantPrice.amount - price.amount}, you will get this at {fmtPrice({amount: updatedVariantPrice.amount, currency: updatedVariantPrice.currency})}</p>
+                                )
                             )
                         }
                     </div>
@@ -212,14 +217,52 @@ function CartItemCard({ item, index, onUpdateQuantity, onRemove }) {
 
 function OrderSummary({ items }) {
     const navigate = useNavigate();
+    const { handleCreateCartOrder,handleVerifyCartOrder } = useCart();
+    const { error, isLoading, Razorpay } = useRazorpay();
+    
+    const user=useSelector(state => state.user);
+    
 
+    async function handleCheckout(){
+        const order = await handleCreateCartOrder();
+        console.log(order);
+
+        const options = {
+      key: "rzp_test_Shgrp5VKMpkLyE",
+      amount: order.amount, // Amount in paise
+      currency: order.currency,
+      name: "Snitch",
+      description: "Snitch Transaction Safe & Secure",
+      order_id: order.id, // Generate order_id on server
+      handler: async (response) => {
+        const isValid = await handleVerifyCartOrder({
+            razorpayPaymentId: response.razorpay_payment_id,
+            razorpayOrderId: response.razorpay_order_id,
+            razorpaySignature: response.razorpay_signature
+          });        
+        if(isValid){
+            navigate(`/order-success?order_id=${response?.razorpay_order_id}`);
+        }
+      },
+      prefill: {
+        name: user?.fullname,
+        email: user?.email,
+        contact: user?.contact,
+      },
+      theme: {
+        color:"#F37254",
+      },
+    };
+
+    const razorpayInstance = new Razorpay(options);
+    razorpayInstance.open();
+  }
     const subtotal = items.reduce(
         (sum, item) => sum + (item.price?.amount || 0) * item.quantity,
         0
     );
     const currency = items[0]?.price?.currency || 'INR';
-    const tax = subtotal * 0.05; // Dummy 5% tax for realism
-    const total = subtotal + tax;
+    const total = subtotal;
 
     return (
         <aside className="bg-[#181818] border border-white/[0.04] rounded-2xl p-7 sticky top-[100px]">
@@ -239,8 +282,8 @@ function OrderSummary({ items }) {
                 </div>
                 <div className="flex justify-between items-center text-[#acabaa]">
                     <span>Estimated Tax</span>
-                    <span className="text-[#e7e5e5] font-medium">
-                        {fmtPrice({ amount: tax, currency })}
+                    <span className="text-emerald-400 text-xs font-bold uppercase tracking-widest bg-emerald-400/10 px-2 py-1 rounded">
+                        INCLUDED
                     </span>
                 </div>
                 <div className="flex justify-between items-center text-[#acabaa]">
@@ -275,7 +318,7 @@ function OrderSummary({ items }) {
 
             {/* Checkout CTA */}
             <button
-                onClick={() => navigate('/checkout')}
+                onClick={()=>handleCheckout()}
                 className="w-full flex items-center justify-center gap-2.5 py-4 px-6
                            bg-gradient-to-br from-[#e9c176] to-[#dab36a]
                            text-[#553c00] font-extrabold text-xs tracking-[0.15em] uppercase
@@ -326,7 +369,6 @@ export default function Cart() {
     const { handleGetCart,handleIncrementCartItemQuantity } = useCart();
     const cartItems = useSelector(state => state.cart.items);
     const [loading, setLoading] = useState(true);
-
     // Using local state for UI responsiveness (optimistic updates if needed later)
     // For now we just bind directly to cartItems from Redux
     
@@ -337,18 +379,7 @@ export default function Cart() {
         })();
     }, []);
 
-    // Handlers for cart actions (can be wired to API/Redux later)
-    const handleUpdateQuantity = (item, change) => {
-        // Placeholder for increment/decrement action
-        console.log("Update quantity", item._id, "by", change);
-        // Dispatch API call or action here...
-    };
-
-    const handleRemoveItem = (item) => {
-        // Placeholder for remove action
-        console.log("Remove item", item._id);
-        // Dispatch API call or action here...
-    };
+  
 
     return (
         <div className="min-h-screen bg-[#0e0e0e] text-[#e7e5e5]">
@@ -378,7 +409,7 @@ export default function Cart() {
                         </div>
                         <SummarySkeleton />
                     </>
-                ) : cartItems.length === 0 ? (
+                ) : cartItems?.length === 0 ? (
                     <EmptyCart onShopNow={() => navigate('/')} />
                 ) : (
                     <>
@@ -394,12 +425,9 @@ export default function Cart() {
                                     key={item._id} 
                                     item={item} 
                                     index={idx}
-                                    onUpdateQuantity={handleUpdateQuantity}
-                                    onRemove={handleRemoveItem}
                                 />
                             ))}
                         </section>
-
                         {/* ── RIGHT: Order Summary ── */}
                         <OrderSummary items={cartItems} />
                     </>
