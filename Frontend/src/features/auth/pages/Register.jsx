@@ -2,10 +2,13 @@ import React, { useState } from 'react';
 import { useAuth } from '../hook/useAuth.js';
 import { useNavigate } from 'react-router';
 import ContinueWithGoogle from '../components/ContinueWithGoogle.jsx';
-
+import { verifyEmail } from '../service/auth.api.js';
+import { setUser } from '../state/auth.slice.js';
+import { useDispatch } from 'react-redux';
 const Register = () => {
     const {handleRegister}=useAuth();
     const navigate=useNavigate();
+    const dispatch=useDispatch();
 
     const [formData, setFormData] = useState({
         fullName: '',
@@ -14,6 +17,11 @@ const Register = () => {
         password: '',
         isSeller: false,
     });
+    const [otpStep, setOtpStep] = useState(false);
+    const [userId, setUserId] = useState(null);
+    const [otp, setOtp] = useState('');
+    const [otpError, setOtpError] = useState('');
+    const [otpLoading, setOtpLoading] = useState(false);
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
@@ -25,19 +33,79 @@ const Register = () => {
 
     const handleSubmit =async (e) => {
         e.preventDefault();
-        const user=await handleRegister({
+        const data=await handleRegister({
             email:formData.email,
             contact:formData.contactNumber,
             password:formData.password,
             fullname:formData.fullName,
             isSeller:formData.isSeller,
         });
-        if(user.role==='seller'){
-            navigate('/seller/dashboard');
-        }else if(user.role==='buyer'){
-            navigate('/');
+        console.log("data from register:", data);
+         if (data?.userId) {
+            setUserId(data.userId);
+            setOtpStep(true);
         }
     };
+    const handleVerifyOtp = async (e) => {
+        e.preventDefault();
+        setOtpLoading(true);
+        setOtpError('');
+        try {
+            const data = await verifyEmail({ userId, otp });
+            dispatch(setUser(data.user));
+            if (data?.user?.role === 'seller') {
+                navigate('/seller/dashboard');
+            } else {
+                navigate('/');
+            }
+        } catch (err) {
+            setOtpError(err?.response?.data?.message || 'Invalid OTP!');
+        } finally {
+            setOtpLoading(false);
+        }
+    };
+    if (otpStep) {
+        return (
+            <div className="h-[100dvh] w-full flex overflow-hidden bg-zinc-950 text-zinc-50 font-sans">
+                <div className="w-full flex items-center justify-center px-6">
+                    <div className="w-full max-w-[440px] bg-zinc-900/80 backdrop-blur-sm p-8 md:p-10 rounded-2xl shadow-2xl border border-zinc-800">
+                        <div className="mb-8 text-center">
+                            <h2 className="text-3xl font-bold tracking-tight mb-2 text-zinc-50">Verify Email</h2>
+                            <p className="text-zinc-400 text-sm tracking-wide">OTP sent to <span className="text-amber-500">{formData.email}</span></p>
+                        </div>
+
+                        <form onSubmit={handleVerifyOtp} className="space-y-5">
+                            <div className="space-y-1.5 group">
+                                <label className="text-[10px] md:text-xs font-semibold text-zinc-500 uppercase tracking-widest transition-colors group-focus-within:text-amber-500">Enter OTP</label>
+                                <input
+                                    type="text"
+                                    value={otp}
+                                    onChange={(e) => setOtp(e.target.value)}
+                                    placeholder="Enter 6 digit OTP"
+                                    maxLength={6}
+                                    className="w-full bg-zinc-950 text-zinc-100 placeholder-zinc-600 rounded-xl px-4 py-4 md:py-3.5 focus:outline-none focus:ring-1 focus:ring-amber-500 transition-all border border-zinc-800 focus:border-amber-500 focus:shadow-[0_0_15px_rgba(245,158,11,0.2)] text-center text-2xl tracking-[0.5em]"
+                                    required
+                                />
+                            </div>
+
+                            {otpError && (
+                                <p className="text-rose-500 text-sm text-center">{otpError}</p>
+                            )}
+
+                            <button
+                                type="submit"
+                                disabled={otpLoading}
+                                className="w-full bg-amber-500 hover:bg-amber-400 text-zinc-950 font-bold text-base md:text-lg rounded-xl px-4 py-4 md:py-3.5 focus:outline-none focus:ring-4 focus:ring-amber-500/30 transition-all duration-300 shadow-lg shadow-amber-500/20 hover:shadow-amber-500/40 active:scale-[0.98] disabled:opacity-50"
+                            >
+                                {otpLoading ? 'Verifying...' : 'Verify OTP'}
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
 
     return (
         <div className="h-[100dvh] w-full flex overflow-hidden bg-zinc-950 text-zinc-50 font-sans selection:bg-amber-500/30 selection:text-amber-200">

@@ -24,6 +24,12 @@ if(!process.env.RAZORPAY_KEY_ID){
 if(!process.env.RAZORPAY_KEY_SECRET){
     throw new Error("RAZORPAY_KEY_SECRET is not defined in environmental variables");
 }
+if(!process.env.GMAIL_USER){
+    throw new Error("GMAIL_USER is not defined in environmental variables");
+}
+if(!process.env.GMAIL_PASS){
+    throw new Error("GMAIL_PASS is not defined in environmental variables");
+}
 
 const config={
     MONGO_URI:process.env.MONGO_URI,
@@ -34,5 +40,7 @@ const config={
     IMAGEKIT_PRIVATE_KEY:process.env.IMAGEKIT_PRIVATE_KEY,
     RAZORPAY_KEY_ID:process.env.RAZORPAY_KEY_ID,
     RAZORPAY_KEY_SECRET:process.env.RAZORPAY_KEY_SECRET,
+    GMAIL_USER: process.env.GMAIL_USER,
+    GMAIL_PASS: process.env.GMAIL_PASS,
 }
 export default config;

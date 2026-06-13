@@ -1,6 +1,6 @@
 import {Router} from 'express';
 import { validateRegisterUser,validateLoginUser } from '../validator/auth.validator.js';
-import { register,login, googleCallback, getMe } from '../controllers/auth.controllers.js';
+import { register, login, googleCallback, getMe, verifyEmail } from '../controllers/auth.controllers.js'; // ✅ verifyEmail add kiya
 import passport from 'passport';
 import config from '../config/config.js';
 import { authenticateUser } from '../middlewares/auth.middleware.js';
@@ -8,7 +8,7 @@ import { authenticateUser } from '../middlewares/auth.middleware.js';
 const authRouter=Router();
 
 authRouter.post('/register',validateRegisterUser,register);
-
+authRouter.post('/verify-email',verifyEmail);
 authRouter.post('/login',validateLoginUser,login);
 
 authRouter.get('/google',
