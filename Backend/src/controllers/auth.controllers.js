@@ -98,6 +98,7 @@ export const verifyEmail = async (req, res) => {
 
 export const login = async (req, res) => {
     const { email, password } = req.body;
+    console.log("NODE_ENV:", config.NODE_ENV);
     try {
         const user = await userModel.findOne({ email });
         if (!user) return res.status(400).json({ message: "User not exists!" });
