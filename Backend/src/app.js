@@ -16,9 +16,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(cors({
-    credentials:true,
-    methods:['GET','POST','PUT','DELETE'],
-    origin:"http://localhost:5173"
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+    origin: [
+        "http://localhost:5173",
+        /\.vercel\.app$/ 
+    ]
 }));
 app.use(passport.initialize());
 
