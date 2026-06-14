@@ -3,9 +3,11 @@ import dotenv from "dotenv";
 import config from '../config/config.js';
 
 
-const transporter=nodemailer.createTransport({
-    service:'gmail',
-    auth:{
+const transporter = nodemailer.createTransport({
+    host: 'smtp.gmail.com', 
+    port: 587,
+    secure: false,           
+    auth: {
         user: config.GMAIL_USER,
         pass: config.GMAIL_PASS,
     }
