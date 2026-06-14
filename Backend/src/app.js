@@ -26,11 +26,13 @@ app.use(cors({
 app.use(passport.initialize());
 
 passport.use(new GoogleStrategy({
-    clientID:config.GOOGLE_CLIENT_ID,
-    clientSecret:config.GOOGLE_CLIENT_SECRET,
-    callbackURL:'/api/auth/google/callback'
-},(accessToken,refreshToken,profile,done)=>{
-    return done(null,profile);
+    clientID: config.GOOGLE_CLIENT_ID,
+    clientSecret: config.GOOGLE_CLIENT_SECRET,
+    callbackURL: config.NODE_ENV === 'development' 
+        ? 'http://localhost:3000/api/auth/google/callback'
+        : 'https://snitch-backend-slt6.onrender.com/api/auth/google/callback' // ✅
+},(accessToken, refreshToken, profile, done) => {
+    return done(null, profile);
 }))
 
 app.use('/api/auth',authRouter);
