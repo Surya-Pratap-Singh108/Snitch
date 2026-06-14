@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../hook/useAuth.js';
 import { useNavigate } from 'react-router';
+import { Link } from 'react-router';
 import ContinueWithGoogle from '../components/ContinueWithGoogle.jsx';
 
 const Login = () => {
@@ -26,9 +27,10 @@ const Login = () => {
             email: formData.email,
             password: formData.password,
         });
-        if(user.role==='seller'){
+        
+        if (user?.role === 'seller') {  
             navigate('/seller/dashboard');
-        }else if(user.role==='buyer'){
+        } else if (user?.role === 'buyer') {
             navigate('/');
         }
     };
@@ -121,7 +123,7 @@ const Login = () => {
                     </form>
                     <ContinueWithGoogle />
                     <p className="text-center text-sm text-zinc-500 mt-8 tracking-wide">
-                        Don't have an account? <a href="/register" className="text-amber-500 hover:text-amber-400 font-semibold underline decoration-amber-500/30 hover:decoration-amber-400 underline-offset-4 transition-colors">Sign up</a>
+                        Don't have an account? <Link to="/register" className="text-amber-500 hover:text-amber-400 font-semibold underline decoration-amber-500/30 hover:decoration-amber-400 underline-offset-4 transition-colors">Sign up</Link>
                     </p>
 
                 </div>

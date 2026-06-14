@@ -5,6 +5,7 @@ import ContinueWithGoogle from '../components/ContinueWithGoogle.jsx';
 import { verifyEmail } from '../service/auth.api.js';
 import { setUser } from '../state/auth.slice.js';
 import { useDispatch } from 'react-redux';
+import { Link } from 'react-router'; 
 const Register = () => {
     const {handleRegister}=useAuth();
     const navigate=useNavigate();
@@ -238,8 +239,8 @@ const Register = () => {
                     
                     <ContinueWithGoogle/>
                     <p className="text-center text-sm text-zinc-500 mt-8 tracking-wide">
-                        Already have an account? <a href="/login" className="text-amber-500 hover:text-amber-400 font-semibold underline decoration-amber-500/30 hover:decoration-amber-400 underline-offset-4 transition-colors">Sign in</a>
-                    </p>    
+                        Already have an account? <Link to="/login" className="text-amber-500 hover:text-amber-400 font-semibold underline decoration-amber-500/30 hover:decoration-amber-400 underline-offset-4 transition-colors">Sign in</Link>
+                     </p>    
 
                 </div>
             </div>
