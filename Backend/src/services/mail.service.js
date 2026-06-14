@@ -1,33 +1,16 @@
-import nodemailer from 'nodemailer'
-import dotenv from "dotenv";
+import { Resend } from 'resend';
 import config from '../config/config.js';
 
+const resend = new Resend(config.RESEND_API_KEY);
 
-const transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com', 
-    port: 587,
-    secure: false,           
-    auth: {
-        user: config.GMAIL_USER,
-        pass: config.GMAIL_PASS,
-    }
-})
-
-transporter.verify()
-    .then(()=>{
-        console.log('Email transporter is ready to send Emails');
-    }).catch((err)=>{
-        console.error("Email transporter Verification Failed:",err);
-    })
-
-export async function sendEmail({to,subject,html,text}) {
-    const mailOption={
-        from: process.env.GMAIL_USER,
+export async function sendEmail({ to, subject, html, text }) {
+    const { data, error } = await resend.emails.send({
+        from: 'Snitch <onboarding@resend.dev>',
         to,
         subject,
         html,
         text
-    }
-    const details=await transporter.sendMail(mailOption);
-    console.log('email Sent:',details);
+    });
+    if (error) throw error;
+    console.log('Email sent:', data);
 }

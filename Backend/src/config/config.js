@@ -42,5 +42,6 @@ const config={
     RAZORPAY_KEY_SECRET:process.env.RAZORPAY_KEY_SECRET,
     GMAIL_USER: process.env.GMAIL_USER,
     GMAIL_PASS: process.env.GMAIL_PASS,
+    RESEND_API_KEY: process.env.RESEND_API_KEY,
 }
 export default config;
