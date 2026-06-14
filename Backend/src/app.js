@@ -15,11 +15,11 @@ app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-// app.use(cors({
-//     credentials:true,
-//     methods:['GET','POST','PUT','DELETE'],
-//     origin:"http://localhost:5173"
-// }));
+app.use(cors({
+    credentials:true,
+    methods:['GET','POST','PUT','DELETE'],
+    origin:"http://localhost:5173"
+}));
 app.use(passport.initialize());
 
 passport.use(new GoogleStrategy({
