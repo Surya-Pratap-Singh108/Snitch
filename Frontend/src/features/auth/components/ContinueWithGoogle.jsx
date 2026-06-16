@@ -3,7 +3,7 @@ import React from 'react'
 const ContinueWithGoogle = () => {
   return (
     <a
-        href="/api/auth/google"
+        href="https://snitch-backend-slt6.onrender.com/api/auth/google"
         className="mt-5 flex items-center justify-center font-bold rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-100 px-4 py-3.5 border border-zinc-700 transition-all duration-300 hover:shadow-md hover:border-zinc-500"
         >
         <svg className="w-5 h-5 mr-3" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
