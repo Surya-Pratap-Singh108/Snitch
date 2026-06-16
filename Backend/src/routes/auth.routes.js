@@ -15,7 +15,12 @@ authRouter.get('/google',
     passport.authenticate('google',{scope:['profile','email']}));
 
 authRouter.get('/google/callback',
-    passport.authenticate('google',{session:false,failureRedirect:config.NODE_ENV === 'development' ?  'http://localhost:5173/login' :'/login'}),googleCallback);
+    passport.authenticate('google',{
+   session:false,failureRedirect:
+ config.NODE_ENV === 'development'
+ ? 'http://localhost:5173/login'
+ : 'https://snitch-tawny.vercel.app/login'
+}),googleCallback);
 
 authRouter.get('/me',authenticateUser,getMe);
 
