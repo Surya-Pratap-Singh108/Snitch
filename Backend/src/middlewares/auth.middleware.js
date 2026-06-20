@@ -2,31 +2,46 @@ import jwt from "jsonwebtoken";
 import config from "../config/config.js";
 import userModel from "../models/user.model.js";
 
-export const authenticateUser = async (req, res, next) => {
-    console.log("Cookies received:", req.cookies);
-    console.log("Headers cookie:", req.headers.cookie); 
-    const token = req.cookies.token || req.headers.authorization?.split(' ')[1];
-   if(!token){
+export const authenticateUser = async (req,res,next)=>{
+    console.log("Cookies:", req.cookies);
+
+    const token =
+      req.cookies.token ||
+      req.headers.authorization?.split(' ')[1];
+
+    console.log("Token:", token);
+
+    if(!token){
+        console.log("No token found");
         return res.status(401).json({
             message:'Unauthorized'
         });
     }
+
     try{
-        const decoded=jwt.verify(token,config.JWT_SECRET);
-        const user=await userModel.findById(decoded.id);
+        const decoded = jwt.verify(token, config.JWT_SECRET);
+
+        console.log("Decoded:", decoded);
+
+        const user = await userModel.findById(decoded.id);
+
+        console.log("User found:", user);
+
         if(!user){
+            console.log("User not found");
             return res.status(401).json({
                 message:'Unauthorized',
             });
         }
+
         req.user=user;
         next();
 
-    }catch(err){
-        console.log(err);
+    } catch(err){
+        console.log("JWT Error:", err);
         return res.status(401).json({
-                message:'Unauthorized',
-            });
+            message:'Unauthorized',
+        });
     }
 }
 
