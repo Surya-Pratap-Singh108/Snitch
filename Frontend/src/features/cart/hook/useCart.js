@@ -7,6 +7,7 @@ export const useCart = () => {
     const handleAddToCart = async ({ productId, variantId }) => {
         try {
             const response = await addItemToCart({ productId, variantId });
+            await handleGetCart();
             return response;
         } catch (error) {
             console.error(error);
