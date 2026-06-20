@@ -130,6 +130,7 @@ export const googleCallback = async (req, res) => {
                 isVerified: true,
             });
         }
+        console.log("USER BEFORE TOKEN:", user); 
         const token = jwt.sign({ id: user._id }, config.JWT_SECRET, { expiresIn: "7d" });
         res.cookie('token', token, {
             httpOnly: true,
