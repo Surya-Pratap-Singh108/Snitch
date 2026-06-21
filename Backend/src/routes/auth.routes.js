@@ -1,9 +1,10 @@
 import {Router} from 'express';
 import { validateRegisterUser,validateLoginUser } from '../validator/auth.validator.js';
-import { register, login, googleCallback, getMe, verifyEmail } from '../controllers/auth.controllers.js'; // ✅ verifyEmail add kiya
+import { register, login, googleCallback, getMe, verifyEmail } from '../controllers/auth.controllers.js'; 
 import passport from 'passport';
 import config from '../config/config.js';
 import { authenticateUser } from '../middlewares/auth.middleware.js';
+import { logout } from '../controllers/auth.controllers.js';
 
 const authRouter=Router();
 
@@ -23,5 +24,7 @@ authRouter.get('/google/callback',
 }),googleCallback);
 
 authRouter.get('/me',authenticateUser,getMe);
+
+authRouter.post('/logout', logout); 
 
 export default authRouter;
