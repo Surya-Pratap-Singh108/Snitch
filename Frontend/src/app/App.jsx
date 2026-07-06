@@ -1,23 +1,35 @@
 import './App.css'
 import { RouterProvider } from 'react-router'
 import { routes } from './app.routes.jsx'
-import { useSelector } from 'react-redux'
-import { useAuth } from '../features/auth/hook/useAuth.js';
-import { useEffect } from 'react';
-
+import { useAuth } from '../features/auth/hook/useAuth.js'
+import { useEffect, useState } from 'react'
 
 function App() {
-  const {handleGetMe}=useAuth();
-  const loading = useSelector((state) => state.auth.loading);
+
+  const { handleGetMe } = useAuth();
+
+  const [initialLoading, setInitialLoading] = useState(true);
+
   useEffect(() => {
-    handleGetMe();
+
+    async function init() {
+      await handleGetMe();
+      setInitialLoading(false);
+    }
+
+    init();
+
   }, []);
-  if (loading) return <div className="h-screen w-full flex items-center justify-center bg-zinc-950 text-amber-500 text-2xl">Loading...</div>
-  return (
-    <>
-      <RouterProvider router={routes} />
-    </>
-  )
+
+  if (initialLoading) {
+    return (
+      <div className="h-screen w-full flex items-center justify-center bg-zinc-950 text-amber-500 text-2xl">
+        Loading...
+      </div>
+    );
+  }
+
+  return <RouterProvider router={routes} />;
 }
 
-export default App
+export default App;
