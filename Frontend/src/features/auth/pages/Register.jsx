@@ -7,7 +7,13 @@ import { setUser } from '../state/auth.slice.js';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router'; 
 const Register = () => {
-    console.log("REGISTER COMPONENT MOUNTED");
+    useEffect(() => {
+    console.log("Register Mounted");
+
+    return () => {
+        console.log("Register Unmounted");
+    };
+}, []);
     const {handleRegister}=useAuth();
     const navigate=useNavigate();
     const dispatch=useDispatch();
@@ -25,6 +31,9 @@ const Register = () => {
     const [otpError, setOtpError] = useState('');
     const [otpLoading, setOtpLoading] = useState(false);
 
+    useEffect(() => {
+    console.log("otpStep changed:", otpStep);
+}, [otpStep]);
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
         setFormData((prev) => ({
