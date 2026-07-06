@@ -41,8 +41,6 @@ const Register = () => {
             fullname:formData.fullName,
             isSeller:formData.isSeller,
         });
-
-
         console.log("data from register:", data);
          if (data?.userId) {
             setUserId(data.userId);
@@ -67,7 +65,6 @@ const Register = () => {
             setOtpLoading(false);
         }
     };
-    console.log("Current otpStep:", otpStep);
     if (otpStep) {
         return (
             <div className="h-[100dvh] w-full flex overflow-hidden bg-zinc-950 text-zinc-50 font-sans">
