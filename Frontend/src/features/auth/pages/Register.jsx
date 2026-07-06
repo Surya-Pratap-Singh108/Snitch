@@ -33,22 +33,49 @@ const Register = () => {
         }));
     };
 
-    const handleSubmit =async (e) => {
-        e.preventDefault();
-        const data=await handleRegister({
-            email:formData.email,
-            contact:formData.contactNumber,
-            password:formData.password,
-            fullname:formData.fullName,
-            isSeller:formData.isSeller,
+    // const handleSubmit =async (e) => {
+    //     e.preventDefault();
+    //     const data=await handleRegister({
+    //         email:formData.email,
+    //         contact:formData.contactNumber,
+    //         password:formData.password,
+    //         fullname:formData.fullName,
+    //         isSeller:formData.isSeller,
+    //     });
+    //     console.log("data from register:", data);
+    //      if (data?.userId) {
+    //         setUserId(data.userId);
+    //         setOtpStep(true);
+    //         console.log("OTP STEP SET");
+    //     }
+    // };
+    const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+        const data = await handleRegister({
+            email: formData.email,
+            contact: formData.contactNumber,
+            password: formData.password,
+            fullname: formData.fullName,
+            isSeller: formData.isSeller,
         });
+
         console.log("data from register:", data);
-         if (data?.userId) {
+
+        if (data?.userId) {
+            console.log("before state update");
+
             setUserId(data.userId);
             setOtpStep(true);
-            console.log("OTP STEP SET");
+
+            console.log("after state update");
         }
-    };
+
+    } catch (err) {
+        console.error("REGISTER ERROR", err);
+    }
+};
     const handleVerifyOtp = async (e) => {
         e.preventDefault();
         setOtpLoading(true);
