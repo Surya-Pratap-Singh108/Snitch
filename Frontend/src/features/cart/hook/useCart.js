@@ -62,6 +62,9 @@ export const useCart = () => {
     const handleVerifyCartOrder = async ({razorpayPaymentId, razorpayOrderId, razorpaySignature}) => {
         try {
             const response = await verifyCartOrder({razorpayPaymentId, razorpayOrderId, razorpaySignature});
+
+            await handleGetCart();
+            
             return response?.success;
         } catch (error) {
             console.error(error);
