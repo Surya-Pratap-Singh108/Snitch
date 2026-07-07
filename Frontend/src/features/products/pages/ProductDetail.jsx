@@ -315,20 +315,7 @@ const ProductDetail = () => {
                                 </div>
 
                                 {/* Actions */}
-                                {/* <div className="flex flex-col sm:flex-row gap-3 lg:gap-4 mt-auto">
-                                    <button 
-                                    onClick={()=>{handleAddToCart({
-                                        productId:product._id,
-                                        variantId:selectedVariant?._id
-                                    })}}
-                                    className="flex-1 py-4 px-6 bg-transparent border border-zinc-700 text-zinc-300 uppercase tracking-[0.15em] text-xs font-semibold hover:bg-zinc-800 hover:text-white transition-all duration-300 rounded-xl active:scale-[0.98]">
-                                        Add to Cart
-                                    </button>
-                                    <button className="flex-1 py-4 px-6 bg-amber-500 border border-amber-500 text-zinc-950 uppercase tracking-[0.15em] text-xs font-bold hover:bg-amber-400 hover:border-amber-400 shadow-lg shadow-amber-500/10 transition-all duration-300 rounded-xl active:scale-[0.98]">
-                                        Buy Now
-                                    </button>
-                                </div> */}
-                                <div className="mt-auto">
+                            <div className="mt-auto">
                                 <button
                                     onClick={() => {
                                         handleAddToCart({

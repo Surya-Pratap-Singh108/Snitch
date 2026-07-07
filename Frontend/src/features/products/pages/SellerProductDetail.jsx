@@ -44,38 +44,6 @@ const SellerProductDetail = () => {
         setNewVariant(prev => ({ ...prev, images: [...prev.images, ...newImages] }));
     };
 
-    // const handleCreateVariant = async () => {
-    //     if (Object.keys(newVariant.attributes).length === 0) {
-    //         alert("At least one valid attribute is required.");
-    //         return;
-    //     }
-
-    //     const finalPrice = newVariant.price.amount && newVariant.price.amount > 0 
-    //         ? newVariant.price 
-    //         : product.price;
-
-    //     const variantToCreate = {
-    //         images: newVariant.images,
-    //         stock: newVariant.stock || 0,
-    //         attributes: newVariant.attributes,
-    //         price: finalPrice
-    //     };
-
-    //     setProduct(prev => ({
-    //         ...prev,
-    //         variants: [...(prev.variants || []), variantToCreate]
-    //     }));
-        
-        
-    //     await handleAddProductVariant(productId, variantToCreate);
-    //     setNewVariant({
-    //         images: [],
-    //         stock: 0,
-    //         attributes: {},
-    //         price: { amount: 0, currency: "INR" }
-    //     });
-    //     setAttrInput({ key: "", value: "" });
-    // };
     const handleCreateVariant = async () => {
 
         if (Object.keys(newVariant.attributes).length === 0) {
@@ -361,10 +329,6 @@ const SellerProductDetail = () => {
                         </div>
 
                         <div className="flex flex-col sm:flex-row gap-4 lg:gap-6 mt-4 lg:mt-6">
-                            {/* <button onClick={handleCreateVariant} className="bg-amber-500 hover:bg-amber-400 text-zinc-950 px-8 py-4 uppercase tracking-widest text-xs font-bold transition-all disabled:opacity-50 flex items-center justify-center lg:justify-start gap-3 shadow-lg shadow-amber-500/20">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                                Create Variant
-                            </button> */}
                             <button
                                 onClick={handleCreateVariant}
                                 disabled={creatingVariant}
