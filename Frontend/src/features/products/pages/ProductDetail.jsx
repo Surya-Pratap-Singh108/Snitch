@@ -315,7 +315,7 @@ const ProductDetail = () => {
                                 </div>
 
                                 {/* Actions */}
-                                <div className="flex flex-col sm:flex-row gap-3 lg:gap-4 mt-auto">
+                                {/* <div className="flex flex-col sm:flex-row gap-3 lg:gap-4 mt-auto">
                                     <button 
                                     onClick={()=>{handleAddToCart({
                                         productId:product._id,
@@ -327,8 +327,21 @@ const ProductDetail = () => {
                                     <button className="flex-1 py-4 px-6 bg-amber-500 border border-amber-500 text-zinc-950 uppercase tracking-[0.15em] text-xs font-bold hover:bg-amber-400 hover:border-amber-400 shadow-lg shadow-amber-500/10 transition-all duration-300 rounded-xl active:scale-[0.98]">
                                         Buy Now
                                     </button>
-                                </div>
-                                
+                                </div> */}
+                                <div className="mt-auto">
+                                <button
+                                    onClick={() => {
+                                        handleAddToCart({
+                                            productId: product._id,
+                                            variantId: selectedVariant?._id,
+                                        });
+                                    }}
+                                    className="w-full py-4 px-6 bg-amber-500 border border-amber-500 text-zinc-950 font-bold uppercase tracking-[0.18em] text-sm rounded-xl shadow-lg shadow-amber-500/20 hover:bg-amber-400 hover:border-amber-400 hover:shadow-amber-500/40 transition-all duration-300 active:scale-[0.98]"
+                                >
+                                    Add to Cart
+                                </button>
+                            </div>
+                                                                
                                 {/* Highlights */}
                                 <div className="mt-8 lg:mt-12 p-5 lg:p-6 bg-[#131313] rounded-2xl border border-zinc-800/60 text-[10px] md:text-xs text-zinc-400 flex flex-col gap-3 lg:gap-4 uppercase tracking-[0.1em] font-medium">
                                     <div className="flex items-center gap-3">

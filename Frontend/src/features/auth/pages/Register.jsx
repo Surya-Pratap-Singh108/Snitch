@@ -7,13 +7,7 @@ import { setUser } from '../state/auth.slice.js';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router'; 
 const Register = () => {
-    useEffect(() => {
-    console.log("Register Mounted");
-
-    return () => {
-        console.log("Register Unmounted");
-    };
-}, []);
+    
     const {handleRegister}=useAuth();
     const navigate=useNavigate();
     const dispatch=useDispatch();
@@ -31,9 +25,7 @@ const Register = () => {
     const [otpError, setOtpError] = useState('');
     const [otpLoading, setOtpLoading] = useState(false);
 
-    useEffect(() => {
-    console.log("otpStep changed:", otpStep);
-}, [otpStep]);
+    
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
         setFormData((prev) => ({
@@ -42,22 +34,7 @@ const Register = () => {
         }));
     };
 
-    // const handleSubmit =async (e) => {
-    //     e.preventDefault();
-    //     const data=await handleRegister({
-    //         email:formData.email,
-    //         contact:formData.contactNumber,
-    //         password:formData.password,
-    //         fullname:formData.fullName,
-    //         isSeller:formData.isSeller,
-    //     });
-    //     console.log("data from register:", data);
-    //      if (data?.userId) {
-    //         setUserId(data.userId);
-    //         setOtpStep(true);
-    //         console.log("OTP STEP SET");
-    //     }
-    // };
+  
     const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -73,12 +50,9 @@ const Register = () => {
         console.log("data from register:", data);
 
         if (data?.userId) {
-            console.log("before state update");
 
             setUserId(data.userId);
             setOtpStep(true);
-
-            console.log("after state update");
         }
 
     } catch (err) {
@@ -103,7 +77,7 @@ const Register = () => {
             setOtpLoading(false);
         }
     };
-    console.log("OTP =",otpStep);
+    
     if (otpStep) {
         return (
             <div className="h-[100dvh] w-full flex overflow-hidden bg-zinc-950 text-zinc-50 font-sans">
