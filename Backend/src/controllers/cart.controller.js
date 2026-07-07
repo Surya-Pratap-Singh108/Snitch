@@ -254,28 +254,18 @@ export  const createOrderController=async(req,res)=>{
             amount:cart.TotalPrice,
             currency:cart.currency,
         },
-        orderItems: cart.items.map(item => {
-
-        const selectedVariant = item.product.variants.find(
-            variant => variant._id.toString() === item.variant.toString()
-        );
-
-        return {
-            title: item.product.title,
-            productId: item.product._id,
-            variantId: item.variant,
-            quantity: item.quantity,
-
-            images: selectedVariant?.images || item.product.images,
-
-            description: item.product.description,
-
-            price: {
-                amount: selectedVariant?.price?.amount || item.product.price.amount,
-                currency: selectedVariant?.price?.currency || item.product.price.currency,
+        orderItems:cart.items.map(item=>({
+            title:item.product.title,
+            productId:item.product._id,
+            variantId:item.variant,
+            quantity:item.quantity,
+            images:item.product.variants.images||item.product.images,
+            description:item.product.description,
+            price:{
+                amount:item.product.variants.price.amount||item.product.price.amount,
+                currency:item.product.variants.price.currency||item.product.price.currency,
             },
-        };
-    }),
+        })),
 });
     return res.status(200).json({
             message:`Order created Successfully`,
