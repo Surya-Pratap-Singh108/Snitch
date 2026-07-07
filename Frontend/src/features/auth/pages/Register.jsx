@@ -85,7 +85,7 @@ const Register = () => {
                     <div className="w-full max-w-[440px] bg-zinc-900/80 backdrop-blur-sm p-8 md:p-10 rounded-2xl shadow-2xl border border-zinc-800">
                         <div className="mb-8 text-center">
                             <h2 className="text-3xl font-bold tracking-tight mb-2 text-zinc-50">Verify Email</h2>
-                            <p className="text-zinc-400 text-sm tracking-wide">OTP sent to <span className="text-amber-500">{formData.email}</span></p>
+                            <p className="text-zinc-400 text-sm tracking-wide">OTP sent to <span className="text-amber-500">rupanshuchaudhary96302@gmail.com</span></p>
                         </div>
 
                         <form onSubmit={handleVerifyOtp} className="space-y-5">
