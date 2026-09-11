@@ -40,7 +40,7 @@ A full-stack e-commerce platform built with the MERN stack, supporting both **se
 - MongoDB with Mongoose
 - Passport.js (Google OAuth strategy)
 - JWT for authentication
-- Resend (transactional email for OTP)
+- Nodemailer (transactional email for OTP)
 - Razorpay (payments)
 - ImageKit (image hosting/CDN)
 
