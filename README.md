@@ -9,7 +9,7 @@ A full-stack e-commerce platform built with the MERN stack, supporting both **se
 ## Features
 
 ### Authentication
-- Email/password signup with **OTP-based email verification** (Nodemailer)
+- Email/password signup with **OTP-based email verification** (Resend)
 - **Google OAuth 2.0** login
 - JWT-based sessions via secure, httpOnly cookies (cross-origin safe)
 - Role-based access control — **Seller** vs **Buyer**
